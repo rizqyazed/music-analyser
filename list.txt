@@ -1,0 +1,8 @@
+Login Page
+- Login Username
+- Login Password
+- Login Button
+- Register Username
+- Register Password
+- Register Button
+- Label Intrusting the user.
