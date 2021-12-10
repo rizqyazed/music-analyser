@@ -1,4 +1,3 @@
-from tkinter import *
 from tkinter import filedialog
 from tkinter.scrolledtext import *
 from librosa.core.notation import list_mela
@@ -7,7 +6,6 @@ from index import *
 from sqlite_engine import *
 from lgn import *
 from save import inject_data
-import sys
 
 
 ## Window Properties
@@ -32,10 +30,6 @@ def open():
     print(root.filename)
     return root.filename
 
-def inject(dir, bpm, key):
-    if inject_data(dir, bpm, key):
-        txt_box.insert(INSERT, "\nInjection Successfull!\nMetadata updated!!")
-    return
 
 """Outputs the BPM and KEY of song"""
 def fsend(dir):
@@ -48,7 +42,7 @@ def fsend(dir):
     if bpm is None and key is None:
         txt_box.delete("1.0","end")
         txt_box.configure(fg="#00a7e5")
-        return "Audio file unsupported..."
+        return "{} unsupported..."
     else:
         txt_box.delete("1.0","end")
         txt_box.configure(fg="#00a7e5")
@@ -102,18 +96,18 @@ load = Button(FrameTop,
             border= False, 
             command=lambda:TEXT.set(open()))
 
-inject = Button(FrameBottom, 
+inject_b = Button(FrameBottom, 
             width= 5, height=1, 
             text="Inject", 
             fg="#00a7e5", bg="#131512", 
             border= False,
-            command= inject(dir_value.get(), round(bpm), str(key)) )
+            command= lambda: inject_data(dir_value.get(), round(bpm), str(key)) )
 
 ##Grid
 send.grid(row=2, column=2, padx=(21,0))
 load.grid(row=2, column=1)
 dir_value.grid(row=2, column=0)
-inject.grid(row=2,column=2)
+inject_b.grid(row=2,column=2)
 txt_box.grid(row = 4 , column=0)
 
 FrameTop.pack(padx= 10, pady=(10,5))
@@ -123,8 +117,5 @@ FrameBottom.pack(pady=(5,0),padx=(20),side= RIGHT)
 ## Final Stage-
 conn.commit()
 root.mainloop()
-root.protocol("WM_DELETE_WINDOW", sys.exit("Program closed"))
 conn.close()
 print("Data Saved!")
-
-

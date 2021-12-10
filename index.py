@@ -1,9 +1,5 @@
 # Libraries used
 import librosa
-import asyncio
-import soundfile as sf
-import tkinter
-
 
 # Function for finding average music note in a sample
 def average(lst):  

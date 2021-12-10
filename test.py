@@ -10,7 +10,7 @@ def average(lst):
     return sum(lst)/len(lst)
 
 # Referencing the audio file that is being analysed
-audio = "list.txt"
+audio = "rex.wav"
 
 # Loading the audio file using Librosa. p,x is the audio's waveform and the q,y is the sample rate(sr) of the audio. 
 # These variables are important as many fucntions in this library requires it.

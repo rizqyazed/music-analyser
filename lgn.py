@@ -16,22 +16,45 @@ def sign_up(user, passw):
     c.execute("SELECT * FROM user_logins")
     d = c.fetchall()
     p = (user, passw)
+    if user == "" or passw == "":
+        print("Please Enter a username and password")
+        w.config(text="Please Enter a username and password", fg="#B21F00")
+        w.place(relx=0.5, 
+                rely=0.75, 
+                anchor=CENTER, )
+        return
+    # if user == "" and passw == "":
+    #     print("Please enter username ")
     if not d:
         c.execute("INSERT INTO user_logins VALUES (?,?)", p)
+        w.config(text="Account has been created!",  fg="#0DAC00")
+        w.place(relx=0.5, 
+                        rely=0.75, 
+                        anchor=CENTER, )
+        print("Test")
         c.execute("SELECT * FROM user_logins")
-        print("YAY")
         print(c.fetchall())
         conn.commit()
-        return 
-    for i in range(len(d)):
-        if user == d[i][0]:
-                print("Username taken")
-                return
     else:
-        c.execute("INSERT INTO user_logins VALUES (?,?)", p)
-    c.execute("SELECT * FROM user_logins")
-    print(c.fetchall())
-    conn.commit()
+        for i in range(len(d)):
+                if user == d[i][0]:
+                        print("Username taken")
+                        w.config(text="Username Taken", fg="#B21F00")
+                        w.place(relx=0.5, 
+                            rely=0.75, 
+                            anchor=CENTER, )
+                        return
+                else:
+                    c.execute("INSERT INTO user_logins VALUES (?,?)", p)
+                    w.config(text="Account has been created!",  fg="#0DAC00")
+                    w.place(relx=0.5, 
+                            rely=0.75, 
+                            anchor=CENTER, )
+                    print("Test")
+                    c.execute("SELECT * FROM user_logins")
+                    print(c.fetchall())
+                    conn.commit()
+                    return
     return 
 
 """Log In Function"""
@@ -42,30 +65,51 @@ def log_in(user, passw):
             and main window will appear.
     """
     global x_pos, y_pos
-    global wee
     c.execute("SELECT * FROM user_logins")
     d = c.fetchall()
     p = (user, passw)
+    if user == "" or passw == "":
+        print("Please Enter a username and password")
+        w.config(text="Please Enter a username and password", fg="#B21F00")
+        w.place(relx=0.5, 
+                rely=0.75, 
+                anchor=CENTER, )
+        return
     if not d:
         print("No accounts have been created yet...\nPlease sign in to make one :)")
-        wee.config(text="testing")
-        return 
-    for i in range(len(d)):
-        if user == d[i][0]:
-            print("Username available")
-            if passw == d[i][1]:
-                print("Password available")
-                print("{} logged in!!".format(user))
-                x_pos = root.winfo_x()
-                y_pos = root.winfo_y()
-                print(x_pos)
-                print(y_pos)        
-                root.destroy()
-                return
-            else:
-                print("Password incorrect")
+        w.config(text="Account hasn't been created yet...", fg="#B21F00")
+        w.place(relx=0.5, 
+                rely=0.75, 
+                anchor=CENTER, )
     else:
-        print("Account doesnt exsist.. Please create one!")
+        for i in range(len(d)):
+            print(d)
+            if user not in d[i]:
+                # print("FALSE")
+                print("No accounts have been created yet...\nPlease sign in to make one :)")
+                w.config(text="Account hasn't been created yet...", fg="#B21F00")
+                w.place(relx=0.5, 
+                rely=0.75, 
+                anchor=CENTER, )
+            else:
+                if user == d[i][0]:
+                    print("Username available")
+                    if passw == d[i][1]:
+                        print("Password available")
+                        print("{} logged in!!".format(user))
+                        x_pos = root.winfo_x()
+                        y_pos = root.winfo_y()
+                        print(x_pos)
+                        print(y_pos)        
+                        root.destroy()
+                        return
+                    else:
+                        print("Password incorrect")
+                        w.config(text="Incorrect Password", fg="#B21F00")
+                        w.place(relx=0.5, 
+                                rely=0.75, 
+                                anchor=CENTER, )
+                        return
     return
 
 ## Window Properties
@@ -74,6 +118,7 @@ root.title("Sign Up")
 root.geometry("450x280")
 root.config(bg="#131512")
 root.resizable(False, False)
+
 
 
 ## Variables
@@ -118,24 +163,22 @@ s1 = Label(fs,
             fg="#00a7e5")
 s1.place(x=56,y=70)
 
-wee = Label(root,
-            text="HEllskfdsa",
-            background="#131512", 
-            fg="#B21F00")
-wee.place(x=215,y=200)
+w = Label(root,
+        background="#131512",
+        fg="#B21F00")
 
 ## Login Entries
 l_user_entry = Entry(fl, textvariable=l_user)
 l_user_entry.place(x=56,y=100)
 
-l_pass_entry = Entry(fl, textvariable=l_pass)
+l_pass_entry = Entry(fl, textvariable=l_pass, show="*")
 l_pass_entry.place(x=56,y=120)
 
 ## SignUp Entries
 s_user_entry = Entry(fs, textvariable=s_user)
 s_user_entry.place(x=56,y=100)
 
-s_pass_entry = Entry(fs, textvariable=s_pass)
+s_pass_entry = Entry(fs, textvariable=s_pass, show="*")
 s_pass_entry.place(x=56,y=120)
 
 ## Buttons
@@ -161,3 +204,4 @@ b_sign.place(x=84,y=150)
 
 conn.commit()
 root.mainloop()
+
